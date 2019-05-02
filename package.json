@@ -1,0 +1,11 @@
+{
+  "name": "sleepy-app2",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "http-server": "0.11.1"
+  },
+  "scripts": {
+    "start": "http-server ./"
+  }
+}
