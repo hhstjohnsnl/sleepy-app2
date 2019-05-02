@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+    <title>Sleepy App</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div align="center" style="width: 100%">
+
+    <h1>Sleepy App</h1>
+
+    <form id="sleepy-form">
+        <div class="Box">
+            <div class="Question">
+                I want to sleep for (hours)
+            </div>
+            <input
+                    name="sleepDuration"
+                    id="sleepDuration"
+                    placeholder="hours"
+                    class="Input"
+            />
+            <div class="Question">
+                Time it takes me to fall asleep (minutes)
+            </div>
+            <input
+                    name="fallingAsleepTime"
+                    id="fallingAsleepTime"
+                    placeholder="minutes"
+                    class="Input"
+            />
+            <div class="Question">
+                I want to wake up at
+            </div>
+            <select name="wakingUpTime" id="wakingUpTime" class="Submit">
+                <option value="05:00 AM">05:00 AM</option>
+                <option value="05:30 AM">05:30 AM</option>
+                <option value="06:00 AM">06:00 AM</option>
+                <option value="06:30 AM">06:30 AM</option>
+                <option value="07:00 AM">07:00 AM</option>
+                <option value="07:30 AM">07:30 AM</option>
+                <option value="08:00 AM">08:00 AM</option>
+                <option value="08:30 AM">08:30 AM</option>
+                <option value="09:00 AM">09:00 AM</option>
+                <option value="09:30 AM">09:30 AM</option>
+            </select>
+            <br/>
+            <input type="submit" id="submit" class="Submit"/>
+        </div>
+
+        <div id="output">
+
+        </div>
+    </form>
+</div>
+
+<script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+
+<script>
+
+	$('#sleepy-form').on('submit', (event) => {
+		event.preventDefault();
+		var $inputs = $('#sleepy-form :input');
+
+		var values = {};
+		$inputs.each(function () {
+			if (this.name && $(this).val()) {
+				values[this.name] = $(this).val();
+			}
+		});
+
+		// make ajax request
+		$.ajax({
+			type: 'GET',
+			url: "https://sleep-recommender.herokuapp.com/api/health/html",
+			data: {
+				wakingUpTime: values.wakingUpTime,
+				sleepDuration: values.sleepDuration,
+				fallingAsleepTime: values.fallingAsleepTime
+			},
+			dataType: "html",
+			success: function (resultData) {
+				console.log("data: ", resultData);
+				$('#output').html(resultData);
+			},
+			error: (err) => {
+				console.log("Incorrect", err);
+			}
+		});
+	});
+</script>
+
+</body>
+</html>
